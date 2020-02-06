@@ -5,6 +5,7 @@ export default function Main(props) {
     const [toShow, setToShow] = useState();
 
     useEffect(() => {
+
         if(window.location.pathname === '/odpowiedzi') {
             setToShow(props.children[1].props.children)
         }

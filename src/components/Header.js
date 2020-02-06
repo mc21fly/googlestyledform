@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import $ from 'jquery';
 
 export default function Header(props) {
@@ -6,6 +6,22 @@ export default function Header(props) {
     const [pageTitle, setPageTitle] = useState('Formularz');
     const [isStatusShowed, setStatus] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState(null);
+    const [width, height] = useWindowSize();
+    
+    function useWindowSize() {
+      const [size, setSize] = useState([window.innerWidth, window.innerHeight])
+
+      useLayoutEffect(() => {
+        function update() {
+          setSize([window.innerWidth, window.innerHeight]);
+        }
+
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
+      }, [])
+
+      return size;
+    }
 
     useEffect(() => {
         document.title = pageTitle;
@@ -17,7 +33,8 @@ export default function Header(props) {
             'left': navEl.offset().left,
             'width': navEl.innerWidth()
         })
-    }, [])
+    }, [width, height])
+
 
     function keyUpHandler() {
         setTypingTimeout(setTimeout(showStatus, 2000))
